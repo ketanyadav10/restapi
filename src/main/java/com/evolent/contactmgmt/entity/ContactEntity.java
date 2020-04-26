@@ -7,19 +7,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Contact")
 public class ContactEntity {
-	@Id
-	private Integer contactId;
+	
 	private String firstName;
 	private String lastName;
 	private String emailId;
+	@Id
 	private String phoneNo;
 	private String status;
-	public Integer getContactId() {
-		return contactId;
-	}
-	public void setContactId(Integer contactId) {
-		this.contactId = contactId;
-	}
 	public String getFirstName() {
 		return firstName;
 	}

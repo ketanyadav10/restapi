@@ -16,42 +16,30 @@ public class ContactServiceImpl implements ContactService {
 	ContactDAO contactDAO;
 	@Override
 	public void addContact(Contact contact) throws Exception {
-		if(contactDAO.getContact(contact.getContactId())!=null) {
+		if(contactDAO.getContact(contact.getPhoneNo())!=null) {
 			throw new Exception("Service.CONTACT_ALREADY_EXISTS");
 		}
 		contactDAO.addContact(contact);
 	}
 
 	@Override
-	public Contact getContact(Integer contactId) throws Exception {
-
-
-		Contact contact = contactDAO.getContact(contactId);
+	public Contact getContact(String phoneNo) throws Exception {
+		Contact contact = contactDAO.getContact(phoneNo);
 		if (contact == null) {
 			throw new Exception("Service.CONTACT_UNAVAILABLE");
 		}
 		return contact;
-	
 	}
 
-	@Override
-	public void updateContact(Integer contactId, String emailId) throws Exception {
-
-		Contact contact = contactDAO.getContact(contactId);
-		if (contact == null) {
-			throw new Exception("Service.CONTACT_UNAVAILABLE");
-		}		
-		contactDAO.updateContact(contactId, emailId);
 	
-	}
 
 	@Override
-	public void deleteContact(Integer contactId) throws Exception {
-		Contact contact = contactDAO.getContact(contactId);
+	public void deleteContact(String phoneNo) throws Exception {
+		Contact contact = contactDAO.getContact(phoneNo);
 		if (contact == null) {
 			throw new Exception("Service.CONTACT_UNAVAILABLE");
 		}
-		contactDAO.deleteContact(contactId);
+		contactDAO.deleteContact(phoneNo);
 	}
 
 	@Override
@@ -61,5 +49,25 @@ public class ContactServiceImpl implements ContactService {
 			throw new Exception("Service.NO_CONTACT_AVAILABLE");
 		}
 		return contactList;
+	}
+
+	@Override
+	public void updateContact(String phoneNo, Contact contact) throws Exception {
+
+		Contact existing = contactDAO.getContact(phoneNo);
+		if (existing == null) {
+			throw new Exception("Service.CONTACT_UNAVAILABLE");
+		}		
+		contactDAO.updateContact(phoneNo, contact);
+	
+	}
+
+	@Override
+	public void createAndUpdateContact(String phoneNo, Contact contact) throws Exception {
+		Contact existing = contactDAO.getContact(phoneNo);
+		if (existing == null) 
+			addContact(contact);
+		else
+			contactDAO.replaceContact(phoneNo, contact);
 	}
 }

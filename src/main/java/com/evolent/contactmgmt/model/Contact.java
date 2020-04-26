@@ -1,19 +1,12 @@
 package com.evolent.contactmgmt.model;
 
 public class Contact {
-	private Integer contactId;
 	private String firstName;
 	private String lastName;
 	private String emailId;
 	private String phoneNo;
 	private String status;
 	
-	public Integer getContactId() {
-		return contactId;
-	}
-	public void setContactId(int contactId) {
-		this.contactId = contactId;
-	}
 	public String getFirstName() {
 		return firstName;
 	}

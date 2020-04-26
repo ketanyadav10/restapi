@@ -5,8 +5,9 @@ import com.evolent.contactmgmt.model.Contact;
 
 public interface ContactService {
 	public void addContact(Contact contact) throws Exception;
-	public Contact getContact(Integer contactId) throws Exception;
-	public void updateContact(Integer contactId, String emailId) throws Exception;
-	public void deleteContact(Integer contactId) throws Exception;
+	public Contact getContact(String phoneNo) throws Exception;
+	public void updateContact(String phoneNo, Contact contact) throws Exception;
+	public void createAndUpdateContact(String phoneNo, Contact contact) throws Exception;
+	public void deleteContact(String phoneNo) throws Exception;
 	public List<Contact> getAllContactDetails() throws Exception;
 }
