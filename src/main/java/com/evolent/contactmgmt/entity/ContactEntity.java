@@ -1,17 +1,23 @@
-package com.evolent.contactmgmt.model;
+package com.evolent.contactmgmt.entity;
 
-public class Contact {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Contact")
+public class ContactEntity {
+	@Id
 	private Integer contactId;
 	private String firstName;
 	private String lastName;
 	private String emailId;
 	private String phoneNo;
 	private String status;
-	
 	public Integer getContactId() {
 		return contactId;
 	}
-	public void setContactId(int contactId) {
+	public void setContactId(Integer contactId) {
 		this.contactId = contactId;
 	}
 	public String getFirstName() {
@@ -44,4 +50,6 @@ public class Contact {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	
 }

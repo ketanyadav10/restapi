@@ -1,41 +1,89 @@
 package com.evolent.contactmgmt.dao;
 
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
+import com.evolent.contactmgmt.entity.ContactEntity;
 import com.evolent.contactmgmt.model.Contact;
+
 @Repository(value="contactDAO")
 public class ContactDAOImpl implements ContactDAO{
 	
-	private Map<Integer, Contact> contacts = new HashMap<Integer, Contact>();
-	public ContactDAOImpl() {
-		contacts.put(1, new Contact(1, "Ketan", "Yadav", "kyadav073@gmail.com", "+917387431338", true));
-		contacts.put(2, new Contact(2, "Toran", "Sahu", "toransahu@gmail.com", "+918602431733", true));
+	@PersistenceContext
+	private EntityManager entityManager;
 
-	}
 	@Override
-	public void addContact(Contact contact) throws Exception {
-		contacts.put(contact.getContactId(), contact);
+	public Integer addContact(Contact contact) throws Exception {
+		Integer contactId = null;
+		ContactEntity entity= new ContactEntity();
+		entity.setContactId(contact.getContactId());
+		entity.setEmailId(contact.getEmailId());
+		entity.setFirstName(contact.getFirstName());
+		entity.setLastName(contact.getLastName());
+		entity.setPhoneNo(contact.getPhoneNo());
+		entity.setStatus(contact.getStatus());
+
+		entityManager.persist(entity);
+		contactId= entity.getContactId();
+		return contactId;
 	}
+
 	@Override
 	public Contact getContact(Integer contactId) throws Exception {
-		return contacts.get(contactId);
+		Contact contact=null;
+		ContactEntity entity=entityManager.find(ContactEntity.class, contactId);
+		if(entity!=null) {
+			contact= new Contact();
+			contact.setContactId(entity.getContactId());
+			contact.setEmailId(entity.getEmailId());
+			contact.setFirstName(entity.getFirstName());
+			contact.setLastName(entity.getLastName());
+			contact.setPhoneNo(entity.getPhoneNo());
+			contact.setStatus(entity.getStatus());
+		}
+		return contact;
 	}
+
 	@Override
 	public void updateContact(Integer contactId, String emailId) throws Exception {
-		contacts.get(contactId).setEmailId(emailId);
+		ContactEntity entity=entityManager.find(ContactEntity.class, contactId);
+		if(entity!=null) {
+			entity.setEmailId(emailId);
+			entityManager.merge(entity);
+		}
 	}
+
 	@Override
 	public void deleteContact(Integer contactId) throws Exception {
-		contacts.remove(contactId);
-		
+		ContactEntity entity=entityManager.find(ContactEntity.class, contactId);
+		entityManager.remove(entity);
 	}
+
 	@Override
 	public List<Contact> getAllContactDetails() throws Exception {
-		return new ArrayList<>(contacts.values());
+		 Query query=entityManager.createQuery("Select c from ContactEntity c");
+		List<ContactEntity> list=(List<ContactEntity>)query.getResultList();
+		List<Contact> contacts = new ArrayList<Contact>() ;
+		
+		for(ContactEntity entity: list) {
+			Contact contact= new Contact();
+			contact.setContactId(entity.getContactId());
+			contact.setEmailId(entity.getEmailId());
+			contact.setFirstName(entity.getFirstName());
+			contact.setLastName(entity.getLastName());
+			contact.setPhoneNo(entity.getPhoneNo());
+			contact.setStatus(entity.getStatus());
+			contacts.add(contact);
+		}
+		return contacts;
 	}
+
+	
 }

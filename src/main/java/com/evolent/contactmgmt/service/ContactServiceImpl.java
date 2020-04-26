@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.evolent.contactmgmt.dao.ContactDAO;
 import com.evolent.contactmgmt.model.Contact;
 
 @Service(value="contactService")
+@Transactional
 public class ContactServiceImpl implements ContactService {
 	@Autowired
 	ContactDAO contactDAO;
