@@ -45,3 +45,11 @@ Code is present in various
  I have implemented it through swagger 
  Please find the details at http://localhost:3010/evocon/swagger-ui.html after starting the application.
  
+ TO DO:
+[] unit test for each endpoint
+[] Few validations are still pending.
+[] logger (use org.slf4j.Logger)
+[] json fields snake_casing
+[] remove other verbose like: printing sql queries at server side
+[] API versioning
+ 
