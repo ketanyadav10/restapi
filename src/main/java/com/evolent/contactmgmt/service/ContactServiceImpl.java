@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.evolent.contactmgmt.dao.ContactDAO;
+import com.evolent.contactmgmt.exceptions.DuplicateContactException;
+import com.evolent.contactmgmt.exceptions.NoSuchContactException;
 import com.evolent.contactmgmt.model.Contact;
 
 @Service(value="contactService")
@@ -17,7 +19,7 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public void addContact(Contact contact) throws Exception {
 		if(contactDAO.getContact(contact.getPhoneNo())!=null) {
-			throw new Exception("Service.CONTACT_ALREADY_EXISTS");
+			throw new DuplicateContactException("Contact with same phone number is already existing.");
 		}
 		contactDAO.addContact(contact);
 	}
@@ -26,7 +28,7 @@ public class ContactServiceImpl implements ContactService {
 	public Contact getContact(String phoneNo) throws Exception {
 		Contact contact = contactDAO.getContact(phoneNo);
 		if (contact == null) {
-			throw new Exception("Service.CONTACT_UNAVAILABLE");
+			throw new NoSuchContactException("Contact with phone no :"+phoneNo+" doesnot exist.");
 		}
 		return contact;
 	}
@@ -37,7 +39,7 @@ public class ContactServiceImpl implements ContactService {
 	public void deleteContact(String phoneNo) throws Exception {
 		Contact contact = contactDAO.getContact(phoneNo);
 		if (contact == null) {
-			throw new Exception("Service.CONTACT_UNAVAILABLE");
+			throw new NoSuchContactException("Contact with phone no :"+phoneNo+" doesnot exist.");
 		}
 		contactDAO.deleteContact(phoneNo);
 	}
@@ -46,7 +48,7 @@ public class ContactServiceImpl implements ContactService {
 	public List<Contact> getAllContactDetails() throws Exception {
 		List<Contact> contactList = contactDAO.getAllContactDetails();
 		if (contactList == null) {
-			throw new Exception("Service.NO_CONTACT_AVAILABLE");
+			throw new NoSuchContactException("No Contacts available.");
 		}
 		return contactList;
 	}
@@ -56,7 +58,7 @@ public class ContactServiceImpl implements ContactService {
 
 		Contact existing = contactDAO.getContact(phoneNo);
 		if (existing == null) {
-			throw new Exception("Service.CONTACT_UNAVAILABLE");
+			throw new NoSuchContactException("Contact with phone no :"+phoneNo+" doesnot exist.");
 		}		
 		contactDAO.updateContact(phoneNo, contact);
 	

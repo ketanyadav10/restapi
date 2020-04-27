@@ -1,10 +1,20 @@
 package com.evolent.contactmgmt.model;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import org.springframework.lang.NonNull;
+
 public class Contact {
 	private String firstName;
 	private String lastName;
+	@Email(message="Email id is not in a valid format, please check.")
 	private String emailId;
+	@NotBlank(message="Phone Number is mandatory.")
+	@Pattern(regexp="(^$|[0-9]{10})",message="Phone no must be of 10 digits.")
 	private String phoneNo;
+	@Pattern(regexp="[A|a]ctive|[I|i]nactive|ACTIVE|INACTIVE",message="Status can be either Active or Inactive.")
 	private String status;
 	
 	public String getFirstName() {

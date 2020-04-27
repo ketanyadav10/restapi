@@ -1,9 +1,15 @@
 package com.evolent.contactmgmt.api;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.evolent.contactmgmt.model.Contact;
+import com.evolent.contactmgmt.model.ErrorMessage;
 import com.evolent.contactmgmt.service.ContactService;
 
 @RestController
@@ -42,11 +49,24 @@ public class ContactAPI {
 	
 	
     @PostMapping(consumes = "application/json")
-	public ResponseEntity<String> addContact(@RequestBody Contact contact) throws Exception  {
-		contactService.addContact(contact);
-		String successMessage = "Contact added successfully";
-		ResponseEntity<String> response = new ResponseEntity<String>(successMessage, HttpStatus.CREATED);
-		return response;
+	public ResponseEntity<String> addContact(@Valid @RequestBody Contact contact, Errors errors) throws Exception {
+		String allError = "";
+		if (errors.hasErrors()) {
+			// collecting the validation errors of all fields together in a String delimited
+			// by commas
+			allError = errors.getAllErrors().stream().map(ObjectError::getDefaultMessage)
+					.collect(Collectors.joining(","));
+			ErrorMessage error = new ErrorMessage();
+			error.setErrorCode(HttpStatus.NOT_ACCEPTABLE.value());
+			error.setMessage(allError);
+			ResponseEntity<String> response = new ResponseEntity<String>(allError, HttpStatus.CREATED);
+			return response;
+		} else {
+			contactService.addContact(contact);
+			String successMessage = "Contact added successfully";
+			ResponseEntity<String> response = new ResponseEntity<String>(successMessage, HttpStatus.CREATED);
+			return response;
+		}
 	}
     @PatchMapping(value = "/{phoneNo}",consumes = "application/json")
     public ResponseEntity<String> updateContact(@PathVariable String phoneNo, @RequestBody Contact contact)  throws Exception {

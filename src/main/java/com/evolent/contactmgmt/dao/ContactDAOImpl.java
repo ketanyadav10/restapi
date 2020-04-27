@@ -27,7 +27,7 @@ public class ContactDAOImpl implements ContactDAO{
 		entity.setFirstName(contact.getFirstName());
 		entity.setLastName(contact.getLastName());
 		entity.setPhoneNo(contact.getPhoneNo());
-		entity.setStatus(contact.getStatus());
+		entity.setStatus(contact.getStatus().toUpperCase());
 		entityManager.persist(entity);
 		return entity.getPhoneNo();
 	}
@@ -57,7 +57,7 @@ public class ContactDAOImpl implements ContactDAO{
 		if(null!=contact.getLastName() && !contact.getLastName().isEmpty())
 			entity.setLastName(contact.getLastName());
 		if(null!=contact.getStatus() && !contact.getStatus().isEmpty())
-			entity.setStatus(contact.getStatus());
+			entity.setStatus(contact.getStatus().toUpperCase());
 		entityManager.merge(entity);
 	}
 	
@@ -68,7 +68,7 @@ public class ContactDAOImpl implements ContactDAO{
 		entity.setEmailId(contact.getEmailId());
 		entity.setFirstName(contact.getFirstName());
 		entity.setLastName(contact.getLastName());
-		entity.setStatus(contact.getStatus());
+		entity.setStatus(contact.getStatus().toUpperCase());
 		entityManager.merge(entity);
 	}
 
