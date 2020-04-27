@@ -47,7 +47,7 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public List<Contact> getAllContactDetails() throws Exception {
 		List<Contact> contactList = contactDAO.getAllContactDetails();
-		if (contactList == null) {
+		if (contactList == null || contactList.size()==0) {
 			throw new NoSuchContactException("No Contacts available.");
 		}
 		return contactList;
