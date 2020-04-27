@@ -24,13 +24,21 @@ import com.evolent.contactmgmt.model.Contact;
 import com.evolent.contactmgmt.model.ErrorMessage;
 import com.evolent.contactmgmt.service.ContactService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value="/contacts")
+@Api(value = "ContactController, REST APIs that deal with Contact DTO")
 public class ContactAPI {
 	
 	@Autowired
 	private ContactService contactService;
-	
+	@ApiOperation(value = "Fetch all the contacts in the database", response = Contact.class, tags="fetchContacts")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Returns the response"),
+							 @ApiResponse(code = 404, message = "No Contacts available.") })
 	@GetMapping(produces = "application/json")
 	public ResponseEntity<List<Contact>> getAllContactDetails() throws Exception {
 		List<Contact> contactList = contactService.getAllContactDetails();
@@ -38,6 +46,9 @@ public class ContactAPI {
 		return response;
 	}
 	
+	@ApiOperation(value = "Fetch a single contact with phone number", response = Contact.class, tags="fetchContact")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Returns the response"),
+							 @ApiResponse(code = 404, message = "Contact with phone no :\"+phoneNo+\" doesnot exist.") })
 	
 	@GetMapping(value = "/{phoneNo}",produces = "application/json")
 	public ResponseEntity<Contact> getContactDetails(@PathVariable String phoneNo)  throws Exception  {
@@ -46,8 +57,9 @@ public class ContactAPI {
 		ResponseEntity<Contact> response = new ResponseEntity<Contact>(contact, HttpStatus.OK);
 		return response;
 	}
-	
-	
+	@ApiOperation(value = "Submits a contact to the database", response = Contact.class, tags="createContact")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Contact added successfully"),
+							 @ApiResponse(code = 404, message = "Contact with same phone number is already existing.") })
     @PostMapping(consumes = "application/json")
 	public ResponseEntity<String> addContact(@Valid @RequestBody Contact contact, Errors errors) throws Exception {
 		String allError = "";
@@ -68,6 +80,10 @@ public class ContactAPI {
 			return response;
 		}
 	}
+	@ApiOperation(value = "Update a contact partially.", response = Contact.class, tags="patchContact")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Contact updated successfully."),
+							 @ApiResponse(code = 404, message = "Contact with phone no :\"+phoneNo+\" doesnot exist.") })
+    
     @PatchMapping(value = "/{phoneNo}",consumes = "application/json")
     public ResponseEntity<String> updateContact(@PathVariable String phoneNo, @RequestBody Contact contact)  throws Exception {
 		contactService.updateContact(phoneNo,contact);
@@ -75,6 +91,10 @@ public class ContactAPI {
 		ResponseEntity<String> response = new ResponseEntity<String>(successMessage, HttpStatus.OK);
 		return response;
 	}
+	@ApiOperation(value = "Updates the contact with specified phone no  by replacing all values", response = Contact.class, tags="updateContact")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Contact updated successfully."),
+							 @ApiResponse(code = 404, message = "Contact with phone no :\"+phoneNo+\" doesnot exist.") })
+   
     @PutMapping(value = "/{phoneNo}",consumes = "application/json")
 	public ResponseEntity<String> createAndUpdateContact(@PathVariable String phoneNo, @RequestBody Contact contact)  throws Exception {
 		contactService.createAndUpdateContact(phoneNo, contact);
@@ -82,7 +102,10 @@ public class ContactAPI {
 		ResponseEntity<String> response = new ResponseEntity<String>(successMessage, HttpStatus.OK);
 		return response;
 	}
-    
+	@ApiOperation(value = "Deletes the contact with specified phone no.", response = Contact.class, tags="deleteContact")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Contact deleted successfully."),
+							 @ApiResponse(code = 404, message = "Contact with phone no :\"+phoneNo+\" doesnot exist.") })
+   
     
 	@DeleteMapping(value = "/{phoneNo}", produces = "text/html")
 	public ResponseEntity<String> deleteContact(@PathVariable String phoneNo) throws Exception  {
