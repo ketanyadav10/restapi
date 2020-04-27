@@ -8,7 +8,7 @@ This is REST API build on Spring boot with Oracle 11g as database.
 - test classeses in `src/test/java`
 - `pom.xml`
 
-# REST API Details:
+# REST API Details
 - GET :
     - /contacts             - fetch all the contacts in the database table contact.
     - /contacts/{phoneNo}   - fetch a single contact with given phone number.
@@ -46,16 +46,16 @@ Password: contact1
 }
 ```
  
-# REST API documentation: 
+# REST API documentation
 
 I have implemented it through swagger 
 Please find the details at [this](http://localhost:3010/evocon/swagger-ui.html) url after starting the application.
  
 # TODOs
-- [] unit test for each endpoint
-- [] Few validations are still pending.
-- [] logger (use org.slf4j.Logger)
-- [] json fields snake_casing
-- [] remove other verbose like: printing sql queries at server side
-- [] API versioning
+- [ ] unit test for each endpoint
+- [ ] Few validations are still pending.
+- [ ] logger (use org.slf4j.Logger)
+- [ ] json fields snake_casing
+- [ ] remove other verbose like: printing sql queries at server side
+- [ ] API versioning
  
