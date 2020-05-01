@@ -4,14 +4,20 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Contact {
 	@NotBlank
+	@JsonProperty("first_name")
 	private String firstName;
 	@NotBlank
+	@JsonProperty("last_name")
 	private String lastName;
+	@JsonProperty("email_id")
 	@Email(message="Email id is not in a valid format, please check.")
 	private String emailId;
 	@NotBlank(message="Phone Number is mandatory.")
+	@JsonProperty("phone_no")
 	@Pattern(regexp="([0-9]{10})",message="Phone no must be of 10 digits.")
 	private String phoneNo;
 	@Pattern(regexp="[A|a]ctive|[I|i]nactive|ACTIVE|INACTIVE",message="Status can be either Active or Inactive.")
