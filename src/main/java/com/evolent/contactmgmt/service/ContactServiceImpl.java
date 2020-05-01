@@ -2,74 +2,60 @@ package com.evolent.contactmgmt.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.evolent.contactmgmt.dao.ContactDAO;
-import com.evolent.contactmgmt.exceptions.DuplicateContactException;
-import com.evolent.contactmgmt.exceptions.NoSuchContactException;
 import com.evolent.contactmgmt.model.Contact;
+import com.evolent.contactmgmt.validations.OtherValidations;
 
-@Service(value="contactService")
+@Service(value = "contactService")
 @Transactional
 public class ContactServiceImpl implements ContactService {
 	@Autowired
 	ContactDAO contactDAO;
+	@Autowired
+	OtherValidations validations;
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Override
 	public void addContact(Contact contact) throws Exception {
-		if(contactDAO.getContact(contact.getPhoneNo())!=null) {
-			throw new DuplicateContactException("Contact with same phone number is already existing.");
-		}
 		contactDAO.addContact(contact);
 	}
 
 	@Override
 	public Contact getContact(String phoneNo) throws Exception {
-		Contact contact = contactDAO.getContact(phoneNo);
-		if (contact == null) {
-			throw new NoSuchContactException("Contact with phone no :"+phoneNo+" doesnot exist.");
-		}
+		Contact contact = null;
+		if(validations.validatePathVariable(phoneNo))
+			contact = contactDAO.getContact(phoneNo);
 		return contact;
 	}
 
-	
-
 	@Override
 	public void deleteContact(String phoneNo) throws Exception {
-		Contact contact = contactDAO.getContact(phoneNo);
-		if (contact == null) {
-			throw new NoSuchContactException("Contact with phone no :"+phoneNo+" doesnot exist.");
-		}
-		contactDAO.deleteContact(phoneNo);
+		if(validations.validatePathVariable(phoneNo))
+			contactDAO.deleteContact(phoneNo);
 	}
 
 	@Override
 	public List<Contact> getAllContactDetails() throws Exception {
-		List<Contact> contactList = contactDAO.getAllContactDetails();
-		if (contactList == null || contactList.size()==0) {
-			throw new NoSuchContactException("No Contacts available.");
-		}
+		List<Contact> contactList = null;
+		contactList = contactDAO.getAllContactDetails();
 		return contactList;
 	}
 
 	@Override
 	public void updateContact(String phoneNo, Contact contact) throws Exception {
-
-		Contact existing = contactDAO.getContact(phoneNo);
-		if (existing == null) {
-			throw new NoSuchContactException("Contact with phone no :"+phoneNo+" doesnot exist.");
-		}		
-		contactDAO.updateContact(phoneNo, contact);
-	
+		if(validations.validatePathVariable(phoneNo))
+			contactDAO.updateContact(phoneNo, contact);
 	}
 
 	@Override
 	public void createAndUpdateContact(String phoneNo, Contact contact) throws Exception {
-		Contact existing = contactDAO.getContact(phoneNo);
-		if (existing == null) 
-			addContact(contact);
-		else
+		if(validations.validatePathVariable(phoneNo))
 			contactDAO.replaceContact(phoneNo, contact);
 	}
 }
