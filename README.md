@@ -23,10 +23,10 @@ This is REST API build on Spring boot with Oracle 11g as database.
 
 # Running the project 
     - run a clean install by right clicking on pom.xml
-	- add your database details in application.properties
+    - add your database details in application.properties
     - right click on the project and run as a springboot application.
  
- After starting the application hit [this](http://localhost:3010/evocon/contacts/) URL through any browser or postman. 
+ After starting the application hit [this](http://localhost:3010/v1/contacts/) URL through any browser or postman. 
  It will ask for authentication 
 
 ```
@@ -49,13 +49,13 @@ Password: contact1
 # REST API documentation
 
 I have implemented it through swagger 
-Please find the details at [this](http://localhost:3010/evocon/swagger-ui.html) url after starting the application.
+Please find the details at [this](http://localhost:3010/v1/swagger-ui.html) url after starting the application.
  
 # TODOs
-- [ ] unit test for each endpoint
-- [ ] Few validations are still pending.
-- [ ] logger (use org.slf4j.Logger)
-- [ ] json fields snake_casing
-- [ ] remove other verbose like: printing sql queries at server side
-- [ ] API versioning
+- [x] unit test for each endpoint
+- [x] Few validations are still pending.
+- [x] logger (use org.slf4j.Logger)
+- [x] json fields snake_casing
+- [x] remove other verbose like: printing sql queries at server side
+- [x] API versioning
  
