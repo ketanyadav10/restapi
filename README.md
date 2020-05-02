@@ -3,10 +3,24 @@
 This is REST API build on Spring boot with Oracle 11g as database.
 
 # Project Structure 
+
 - Code is present in various `packages` in `src/main/java`
 - `application.properties` in `src/main/resources`
 - test classeses in `src/test/java`
 - `pom.xml`
+
+structure of `src/main/java`
+```
+└───contactmgmt		#ContactmgmtApplication.java - to run springbootapplication
+    ├───api			#Controller 
+    ├───config		#Security
+    ├───dao			#database related 
+    ├───entity		#db-entities
+    ├───exceptions	#user defined custom exceptions and exceptions handler
+    ├───model		#DTO's
+    ├───service		#service layer
+    └───validations	#validations related files
+```
 
 # REST API Details
 - GET :
@@ -20,6 +34,8 @@ This is REST API build on Spring boot with Oracle 11g as database.
     - /contacts/{phoneNo}    - Modifies the contact with given phone no with the new request.
 - DELETE:
     - /contacts/{phoneNo}    - Deletes the contact with given phone no.
+
+	***phoneNo must be of 10 digits***
 
 # Running the project 
     - run a clean install by right clicking on pom.xml

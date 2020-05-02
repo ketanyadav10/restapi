@@ -20,8 +20,9 @@ public class Contact {
 	@JsonProperty("phone_no")
 	@Pattern(regexp="([0-9]{10})",message="Phone no must be of 10 digits.")
 	private String phoneNo;
-	@Pattern(regexp="[A|a]ctive|[I|i]nactive|ACTIVE|INACTIVE",message="Status can be either Active or Inactive.")
+	@Pattern(regexp="[A|a]ctive|[I|i]nactive|[A|a]CTIVE|[A|a]NACTIVE",message="Status can be either Active or Inactive.")
 	@NotBlank(message="status cannot be empty")
+	@JsonProperty("status")
 	private String status;
 	
 	public String getFirstName() {

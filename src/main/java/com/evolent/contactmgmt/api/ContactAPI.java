@@ -151,7 +151,7 @@ public class ContactAPI {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Contact deleted successfully."),
 			@ApiResponse(code = 404, message = "Contact details not found, give valid Phone Number") })
 
-	@DeleteMapping(value = "/{phoneNo}", produces = "text/html")
+	@DeleteMapping(value = "/{phoneNo}", produces = "application/json")
 	public ResponseEntity<String> deleteContact(@PathVariable String phoneNo) throws Exception {
 		try {
 			contactService.deleteContact(phoneNo);

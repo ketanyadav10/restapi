@@ -1,0 +1,12 @@
+Folder PATH listing for volume New Volume
+Volume serial number is 8C65-90FC
+E:.
+└───contactmgmt
+    ├───api
+    ├───config
+    ├───dao
+    ├───entity
+    ├───exceptions
+    ├───model
+    ├───service
+    └───validations
