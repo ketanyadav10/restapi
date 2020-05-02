@@ -12,9 +12,9 @@ This is REST API build on Spring boot with Oracle 11g as database.
 structure of `src/main/java`
 ```
 └───contactmgmt		#ContactmgmtApplication.java - to run springbootapplication
-    ├───api			#Controller 
+    ├───api		#Controller 
     ├───config		#Security
-    ├───dao			#database related 
+    ├───dao		#database related 
     ├───entity		#db-entities
     ├───exceptions	#user defined custom exceptions and exceptions handler
     ├───model		#DTO's
@@ -35,7 +35,7 @@ structure of `src/main/java`
 - DELETE:
     - /contacts/{phoneNo}    - Deletes the contact with given phone no.
 
-	***phoneNo must be of 10 digits***
+***Note: phoneNo must be of 10 digits***
 
 # Running the project 
     - run a clean install by right clicking on pom.xml
@@ -54,10 +54,10 @@ Password: contact1
 
 ```
 {
-    "firstName": "Ketan",
-    "lastName": "Yadav",
-    "emailId": "ky@gmail.com",
-    "phoneNo": "9009002000",
+    "first_name": "Ketan",
+    "last_name": "Yadav",
+    "email_id": "ky@gmail.com",
+    "phone_no": "9009002000",
     "status": "Active"
 }
 ```
