@@ -29,24 +29,24 @@ public class ExceptionControllerAdvice {
 	@ExceptionHandler(NoSuchContactException.class)
 	public ResponseEntity<ErrorMessage> exceptionHandler(NoSuchContactException ex) {
 		 ErrorMessage error = new ErrorMessage();
-	        error.setErrorCode(HttpStatus.NOT_FOUND.value());
+	        error.setErrorCode(HttpStatus.NOT_FOUND);
 	        error.setMessage(env.getProperty(ex.getMessage()));
-	        return new ResponseEntity<>(error, HttpStatus.OK);
+	        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 		 
 	}
 	@ExceptionHandler(DuplicateContactException.class)
 	public ResponseEntity<ErrorMessage> exceptionHandler2(DuplicateContactException ex) {
 		 ErrorMessage error = new ErrorMessage();
-	        error.setErrorCode(HttpStatus.CONFLICT.value());
+	        error.setErrorCode(HttpStatus.CONFLICT);
 	        error.setMessage(env.getProperty(ex.getMessage()));
-	        return new ResponseEntity<>(error, HttpStatus.OK);
+	        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 	}
 	@ExceptionHandler(ResponseStatusException.class)
 	public ResponseEntity<ErrorMessage> responseStatus(ResponseStatusException ex) {
 		 ErrorMessage error = new ErrorMessage();
-	        error.setErrorCode(HttpStatus.NOT_FOUND.value());
+	        error.setErrorCode(HttpStatus.NOT_FOUND);
 	        error.setMessage(env.getProperty(ex.getMessage()));
-	        return new ResponseEntity<>(error, HttpStatus.OK);
+	        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 		 
 	}
 	 
@@ -66,8 +66,8 @@ public class ExceptionControllerAdvice {
 	@ExceptionHandler(InvalidRequestException.class)
 	public ResponseEntity<ErrorMessage> handleRequest(InvalidRequestException ex) {
 		 ErrorMessage error = new ErrorMessage();
-	        error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+	        error.setErrorCode(HttpStatus.BAD_REQUEST);
 	        error.setMessage(env.getProperty(ex.getMessage()));
-	        return new ResponseEntity<>(error, HttpStatus.OK);
+	        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 }

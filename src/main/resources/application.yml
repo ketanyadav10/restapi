@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    active: test
+
+server:
+  servlet.context-path: /v1
+  port: 3010
+  
+  
+logging:
+  file: Errorlog.log
+  level:
+    root: warn
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss,SSS} %5p [%t] %c [%M] - %m%n"
+    
+---  
+spring:      
+  profiles: dev
+  datasource:    
+    url: jdbc:mysql://localhost:3306/
+    username: root
+    password: root 
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: update
+   
+---
+spring:      
+  profiles: test
+  h2:    console:      enabled: true
+      path: /h2
+  datasource:    
+    url: jdbc:h2:mem:testdb/
+    username: sa
+    password:      
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+---
+spring:      
+  profiles: prod
+  datasource:    
+    url: jdbc:oracle:thin://localhost:1521:orcl
+    username: XPS
+    password:  ketone    
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: update

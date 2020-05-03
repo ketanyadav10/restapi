@@ -38,6 +38,7 @@ structure of `src/main/java`
 ***Note: phoneNo must be of 10 digits***
 
 # Running the project 
+	- Import as a maven project
     - run a clean install by right clicking on pom.xml
     - add your database details in application.properties
     - right click on the project and run as a springboot application.

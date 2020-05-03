@@ -24,4 +24,8 @@ public class testValidations {
 	public void testValidatePathVariable_exception() throws Exception {
 		val.validatePathVariable("73878");
 	}
+	@Test(expected = InvalidRequestException.class)
+	public void testValidatePathVariable_empty() throws Exception {
+		val.validatePathVariable("");
+	}
 }

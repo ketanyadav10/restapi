@@ -1,4 +1,4 @@
-package com.evolent.contactmgmt.config;
+package com.evolent.contactmgmt.security;
  
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         .anyRequest().authenticated()
         .and(). 
         httpBasic().and()
+        .headers().frameOptions().disable().and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).and().csrf().disable();
 
 	}

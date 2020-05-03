@@ -1,17 +1,18 @@
 package com.evolent.contactmgmt.model;
+import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ErrorMessage {
 	@JsonProperty("error_code")
-	private int errorCode;
+	private HttpStatus errorCode;
+	@JsonProperty("message")
 	private String message;
-
-	public int getErrorCode() {
+	public HttpStatus getErrorCode() {
 		return errorCode;
 	}
 
-	public void setErrorCode(int errorCode) {
+	public void setErrorCode(HttpStatus errorCode) {
 		this.errorCode = errorCode;
 	}
 
