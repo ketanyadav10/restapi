@@ -12,15 +12,22 @@ This is REST API build on Spring boot with Oracle 11g as database.
 structure of `src/main/java`
 ```
 └───contactmgmt		#ContactmgmtApplication.java - to run springbootapplication
-    ├───api		#Controller 
-    ├───config		#Security
-    ├───dao		#database related 
+    ├───api		#Controller
+    ├───dao		#database related
     ├───entity		#db-entities
-    ├───exceptions	#user defined custom exceptions and exceptions handler
+    ├───exceptions	#custom exceptions and exceptions handler
     ├───model		#DTO's
-    ├───service		#service layer
-    └───validations	#validations related files
+    ├───security	#Security
+    ├───service		#service laye
+    └───validations	#validations related file
 ```
+# Profiles
+
+| Environments  | Databases |
+| ------------- | ------------- |
+| dev  | MySQL |
+| test  | In-memory  |
+| prod  | Oracle |
 
 # REST API Details
 - GET :
