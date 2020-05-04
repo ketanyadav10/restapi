@@ -26,7 +26,7 @@ structure of `src/main/java`
 | Environments  | Databases |
 | ------------- | ------------- |
 | dev  | MySQL |
-| test  | In-memory  |
+| test  | In-memory(h2)  |
 | prod  | Oracle |
 
 # REST API Details
@@ -47,10 +47,11 @@ structure of `src/main/java`
 # Running the project 
 	- Import as a maven project
     - run a clean install by right clicking on pom.xml
-    - add your database details in application.properties
+    - test profile is active now, it uses in-mem database. DB console can be viewed at runtime [here](http://localhost:3010/v1/h2/)
+    - Profile can be changed in application.yml (spring.profile.active='either test/dev/prod')
     - right click on the project and run as a springboot application.
  
- After starting the application hit [this](http://localhost:3010/v1/contacts/) URL through any browser or postman. 
+ After starting the application hit [this](http://localhost:3010/v1/contacts/) URL through any browser, postman or [swaggerui](http://localhost:3010/v1/swagger-ui.html). 
  It will ask for authentication 
 
 ```
@@ -64,8 +65,8 @@ Password: contact1
 {
     "first_name": "Ketan",
     "last_name": "Yadav",
-    "email_id": "ky@gmail.com",
-    "phone_no": "9009002000",
+    "email_id": "kyadav073@gmail.com",
+    "phone_no": "7387431338",
     "status": "Active"
 }
 ```
@@ -73,7 +74,7 @@ Password: contact1
 # REST API documentation
 
 I have implemented it through swagger 
-Please find the details at [this](http://localhost:3010/v1/swagger-ui.html) url after starting the application.
+Please find the details at [swaggerui](http://localhost:3010/v1/swagger-ui.html) url after starting the application.
  
 # TODOs
 - [x] unit test for each endpoint
@@ -82,4 +83,4 @@ Please find the details at [this](http://localhost:3010/v1/swagger-ui.html) url 
 - [x] json fields snake_casing
 - [x] remove other verbose like: printing sql queries at server side
 - [x] API versioning
- 
+- [x] Profiles
