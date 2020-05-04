@@ -45,12 +45,11 @@ structure of `src/main/java`
 >***Note:*** *{phoneNo} must be of 10 digits*
 
 # Running the project 
-	- Import as a maven project
-    - run a clean install by right clicking on pom.xml
-    - test profile is active now, it uses in-mem database. H2 console can be viewed at runtime(link below)
-    - Profile can be changed in application.yml (spring.profile.active='either test/dev/prod')
-    - right click on the project and run as a springboot application.
- H2 console: [link](http://localhost:3010/v1/h2/)
+- Import as a maven project
+- run a clean install by right clicking on pom.xml
+- test profile is active now, it uses in-mem database. H2 console can be viewed at runtime [here](http://localhost:3010/v1/h2/)
+- Profile can be changed in application.yml (spring.profile.active='either test/dev/prod')
+- right click on the project and run as a springboot application.
  
  After starting the application hit [this](http://localhost:3010/v1/contacts/) URL through any browser, postman or use [swaggerui](http://localhost:3010/v1/swagger-ui.html). 
  
