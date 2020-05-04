@@ -47,11 +47,12 @@ structure of `src/main/java`
 # Running the project 
 	- Import as a maven project
     - run a clean install by right clicking on pom.xml
-    - test profile is active now, it uses in-mem database. DB console can be viewed at runtime [here](http://localhost:3010/v1/h2/)
+    - test profile is active now, it uses in-mem database. H2 console can be viewed at runtime(link below)
     - Profile can be changed in application.yml (spring.profile.active='either test/dev/prod')
     - right click on the project and run as a springboot application.
+ H2 console: [link](http://localhost:3010/v1/h2/)
+ After starting the application hit [this](http://localhost:3010/v1/contacts/) URL through any browser, postman or use [swaggerui](http://localhost:3010/v1/swagger-ui.html). 
  
- After starting the application hit [this](http://localhost:3010/v1/contacts/) URL through any browser, postman or [swaggerui](http://localhost:3010/v1/swagger-ui.html). 
  It will ask for authentication 
 
 ```
@@ -74,7 +75,7 @@ Password: contact1
 # REST API documentation
 
 I have implemented it through swagger 
-Please find the details at [swaggerui](http://localhost:3010/v1/swagger-ui.html) url after starting the application.
+Please find the details at [swaggerui](http://localhost:3010/v1/swagger-ui.html) after starting the application.
  
 # TODOs
 - [x] unit test for each endpoint
