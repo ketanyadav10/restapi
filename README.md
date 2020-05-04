@@ -1,6 +1,6 @@
 # REST API
 
-This is REST API build on Spring boot with Oracle 11g as database.
+This REST API is build on Spring boot with Oracle 11g as database.
 
 # Project Structure 
 
@@ -18,7 +18,7 @@ structure of `src/main/java`
     ├───exceptions	#custom exceptions and exceptions handler
     ├───model		#DTO's
     ├───security	#Security
-    ├───service		#service laye
+    ├───service		#service layer
     └───validations	#validations related file
 ```
 # Profiles
@@ -42,7 +42,7 @@ structure of `src/main/java`
 - DELETE:
     - /contacts/{phoneNo}    - Deletes the contact with given phone no.
 
-***Note: phoneNo must be of 10 digits***
+>***Note:*** *{phoneNo} must be of 10 digits*
 
 # Running the project 
 	- Import as a maven project
@@ -51,6 +51,7 @@ structure of `src/main/java`
     - Profile can be changed in application.yml (spring.profile.active='either test/dev/prod')
     - right click on the project and run as a springboot application.
  H2 console: [link](http://localhost:3010/v1/h2/)
+ 
  After starting the application hit [this](http://localhost:3010/v1/contacts/) URL through any browser, postman or use [swaggerui](http://localhost:3010/v1/swagger-ui.html). 
  
  It will ask for authentication 
@@ -74,7 +75,7 @@ Password: contact1
  
 # REST API documentation
 
-I have implemented it through swagger 
+I have implemented it through swagger. 
 Please find the details at [swaggerui](http://localhost:3010/v1/swagger-ui.html) after starting the application.
  
 # TODOs
