@@ -29,9 +29,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.evolent.contactmgmt.exceptions.NoSuchContactException;
 import com.evolent.contactmgmt.model.Contact;
 import com.evolent.contactmgmt.model.ErrorMessage;
 import com.evolent.contactmgmt.model.ResponseMessage;
+import com.evolent.contactmgmt.service.ContactService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
@@ -39,6 +41,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Profile("test")
 public class testContactAPI {
 
+	@Autowired
+	ContactService contactService;
 	@Autowired
 	private TestRestTemplate template;
 	@LocalServerPort
@@ -84,7 +88,7 @@ public class testContactAPI {
 		assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
 	}
 	@Test
-	public void testGetAllContactDetails_pass() throws Exception {
+	public void whenGetAllContactDetailsIsCalled_ShouldReturnStatus200AndResponseShouldContainContact() throws Exception {
 		ResponseEntity<String> result = template.getForEntity(new URI(baseUrl), String.class); //actual database call
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		ObjectMapper mapper = new ObjectMapper();
@@ -92,10 +96,10 @@ public class testContactAPI {
 		mapper.writeValue(out, contacts);
 		byte[] data = out.toByteArray();
 		assertTrue(result.getBody().contains(new String(data)));
-		//assertEquals(new String(data), result.getBody());
+		assertEquals(new String(data), result.getBody());
 	}
 	@Test
-	public void testGetAllContactDetails_fail() throws Exception {
+	public void whenGetAllContactDetailsIsCalled_AndNothingInDB_shouldReturnStatusCode404NotFound() throws Exception {
 		template.delete(new URI(baseUrl+phoneNo));
 		ResponseEntity<String> result = template.getForEntity(new URI(baseUrl), String.class); //actual database call
 		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());  // No data exists at this point
@@ -103,7 +107,7 @@ public class testContactAPI {
 		template.postForEntity(new URI(baseUrl),contact, ResponseMessage.class);	
 	}
 	@Test
-	public void testResponseforGET_pass() throws Exception {
+	public void whenGetContactDetailsIsCalled_WithCorrectPhoneNo_ShouldReturnStatus200AndResponseShouldContainContact() throws Exception {
 		ResponseEntity<String> result = template.getForEntity(new URI(baseUrl+phoneNo), String.class); //actual database call
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		ObjectMapper mapper = new ObjectMapper();
@@ -113,7 +117,7 @@ public class testContactAPI {
 		Assert.assertEquals(new String(data),result.getBody());
 	}
 	@Test
-	public void testResponseforGET_fail() throws Exception {
+	public void whenGetContactDetailsIsCalled_WithIncorrectPhoneNo_shouldReturnStatusCode404NotFound() throws Exception {
 		template.delete(new URI(baseUrl+phoneNo));
 		ResponseEntity<ErrorMessage> result = template.getForEntity(new URI(baseUrl+phoneNo), ErrorMessage.class); //actual database call
 		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
@@ -121,7 +125,7 @@ public class testContactAPI {
 		template.postForEntity(new URI(baseUrl),contact, ResponseMessage.class);
 	}
 	@Test
-	public void testResponseforPOST_pass() throws Exception {
+	public void whenAddContactIsCalled_WithCorrectDetails_ShouldReturnStatus201Created() throws Exception {
 		ResponseEntity<ResponseMessage> result = template.postForEntity(new URI(baseUrl),newContact, ResponseMessage.class); //actual database call
 		assertEquals(HttpStatus.CREATED, result.getStatusCode());
 		ResponseMessage msg= new ResponseMessage(HttpStatus.CREATED,env.getProperty("ContactAPI.ADD_SUCCESS"));
@@ -130,13 +134,13 @@ public class testContactAPI {
 		template.delete(new URI(baseUrl+"/"+newContact.getPhoneNo())); // Removing newly added entry
 		}
 	@Test
-	public void testResponseforPOST_fail() throws Exception {
+	public void whenAddContactIsCalled_WithAlreadyPresentContact_ShouldReturnStatus409Conflict() throws Exception {
 		ResponseEntity<String> result = template.postForEntity(new URI(baseUrl),contact, String.class);
 		assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
 		assertTrue(result.getBody().contains(env.getProperty("DAO.CONTACT_ALREADY_EXISTS")));
 		}
 	@Test
-	public void testResponseforPUT_pass() throws Exception {
+	public void whenCreateAndUpdateContactIsCalled_WithExistingContact_ShouldUpdateItAndReturnStatus200() throws Exception {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Contact> entity= new HttpEntity<Contact>(contact,headers);
@@ -144,8 +148,17 @@ public class testContactAPI {
 		assertEquals(env.getProperty("ContactAPI.UPDATE_SUCCESS"), result.getBody().getMessage());
 		assertEquals(HttpStatus.OK, result.getBody().getResponseCode());
 	}
+	public void whenCreateAndUpdateContactIsCalled_WithNewContact_ShouldCreateItAndReturnStatus200() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Contact> entity= new HttpEntity<Contact>(contact,headers);
+		ResponseEntity<ResponseMessage> result = template.exchange(new URI(baseUrl+"/0987654321"),HttpMethod.PUT,entity, ResponseMessage.class); 
+		assertEquals(env.getProperty("ContactAPI.UPDATE_SUCCESS"), result.getBody().getMessage());
+		assertEquals(HttpStatus.OK, result.getBody().getResponseCode());
+		template.delete(new URI(baseUrl+"/0987654321"));
+	}
 	@Test
-	public void testResponseforPUT_fail() throws Exception {
+	public void whenCreateAndUpdateContactIsCalled_WithIncorrectDetails_ShouldCreateItAndReturnStatus400BadRequest() throws Exception {
 		contact.setEmailId("ketan");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -154,26 +167,27 @@ public class testContactAPI {
 		assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
 	}
 	@Test
-	public void testResponseforPATCH_pass() throws Exception {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Contact> entity= new HttpEntity<Contact>(contact,headers);
-		ResponseEntity<ResponseMessage> result = template.exchange(new URI(baseUrl+phoneNo),HttpMethod.PATCH,entity, ResponseMessage.class); 
-		assertEquals(env.getProperty("ContactAPI.UPDATE_SUCCESS"), result.getBody().getMessage());
-		assertEquals(HttpStatus.OK, result.getBody().getResponseCode());
+	public void whenUpdateContactIsCalled_WithExistingPhoneNo_ShouldUpdateItAndReturn200() throws Exception {
+		ResponseMessage result = template.patchForObject(new URI(baseUrl+phoneNo), contact, ResponseMessage.class); 
+		assertEquals(env.getProperty("ContactAPI.UPDATE_SUCCESS"), result.getMessage());
+		assertEquals(HttpStatus.OK, result.getResponseCode());
 	}
 	@Test
-	public void testResponseforDELETE_pass() throws Exception {
+	public void whenUpdateContactIsCalled_WithPhoneNoNotExisting_ShouldReturnNotAvailable() throws Exception {
+		ResponseMessage result = template.patchForObject(new URI(baseUrl+"/9876543210"), contact, ResponseMessage.class); 
+		assertEquals(env.getProperty("DAO.CONTACT_UNAVAILABLE"), result.getMessage());
+	}
+	@Test
+	public void whenDeleteContactIsCalled_WithExistingPhoneNo_ShouldDeleteItAndReturn200() throws Exception {
 		//adding before delete 
 		template.postForEntity(new URI(baseUrl),newContact, ResponseMessage.class); 
 		template.delete(new URI(baseUrl+"/"+newContact.getPhoneNo()));
 		ResponseEntity<String> result = template.getForEntity(new URI(baseUrl+"/"+newContact.getPhoneNo()), String.class);
 		assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
 	}
-	@Test
-	public void testResponseforDELETE_fail() throws Exception {
-		template.delete(new URI(baseUrl+"/"+newContact.getPhoneNo()));
-		ResponseEntity<String> result = template.getForEntity(new URI(baseUrl+"/000"), String.class);
-		assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+	@Test(expected=NoSuchContactException.class)
+	public void whenDeleteContactIsCalled_WithIncorrectPhoneNo_ItShouldReturnStatusCode404NotFound() throws Exception  {
+		//template.delete(baseUrl+"/9876543210");
+		contactService.deleteContact("9876543210");
 	}
 }
